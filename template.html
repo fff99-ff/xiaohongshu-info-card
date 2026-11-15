@@ -1,0 +1,406 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>小红书信息卡模板</title>
+<style>
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body { font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Microsoft YaHei", sans-serif; background:#F5F5F0; }
+
+  .container { display:flex; flex-direction:column; gap:0; }
+
+  .card {
+    width:480px;
+    min-height:640px;
+    background:#F5F5F0;
+    position:relative;
+    display:flex;
+    flex-direction:column;
+    overflow:hidden;
+  }
+  /* Decorative corner blobs for non-cover pages */
+  .card:not(.cover)::before {
+    content:"";
+    position:absolute;
+    width:220px; height:220px;
+    border-radius:50%;
+    background:radial-gradient(circle, rgba(212,136,154,0.07) 0%, transparent 70%);
+    bottom:-60px; right:-60px;
+    z-index:0;
+    pointer-events:none;
+  }
+  .card:not(.cover)::after {
+    content:"";
+    position:absolute;
+    width:160px; height:160px;
+    border-radius:50%;
+    background:radial-gradient(circle, rgba(107,127,153,0.06) 0%, transparent 70%);
+    top:-40px; right:-40px;
+    z-index:0;
+    pointer-events:none;
+  }
+  .card > * { position:relative; z-index:1; }
+
+  /* Common header */
+  .card-header {
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    padding:20px 24px 12px;
+  }
+  .card-tag {
+    font-size:11px;
+    color:#8B7355;
+    letter-spacing:1px;
+    font-weight:600;
+  }
+  .card-num {
+    font-size:11px;
+    color:#B8A898;
+    font-weight:600;
+  }
+
+  .card-title {
+    padding:0 24px;
+    font-size:26px;
+    font-weight:800;
+    color:#2C2820;
+    line-height:1.35;
+    margin-bottom:20px;
+  }
+
+  .card-content {
+    flex:1;
+    padding:0 24px 24px;
+    display:flex;
+    flex-direction:column;
+    gap:16px;
+  }
+
+  /* Source footer */
+  .card-footer {
+    padding:12px 24px 16px;
+    font-size:9px;
+    color:#B8A898;
+    text-align:right;
+    border-top:1px solid rgba(184,168,152,0.2);
+    line-height:1.5;
+  }
+
+  /* ============ Cover ============ */
+  .cover {
+    background:linear-gradient(160deg, #FAF6EF 0%, #F0E8DC 50%, #E8DDD0 100%);
+  }
+  .cover-illustration {
+    height:300px;
+    position:relative;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    overflow:hidden;
+  }
+  .cover-illustration::before {
+    content:"";
+    position:absolute;
+    width:280px; height:280px;
+    border-radius:50%;
+    background:radial-gradient(circle, rgba(212,136,154,0.15) 0%, rgba(212,136,154,0.05) 60%, transparent 100%);
+    top:10px; right:-40px;
+  }
+  .cover-illustration::after {
+    content:"";
+    position:absolute;
+    width:200px; height:200px;
+    border-radius:50%;
+    background:radial-gradient(circle, rgba(107,127,153,0.12) 0%, transparent 70%);
+    bottom:-30px; left:-30px;
+  }
+  .cover-key-quote {
+    padding:20px 28px 12px;
+    font-size:15px;
+    line-height:1.6;
+    color:#2C2820;
+    text-align:center;
+  }
+  .cover-key-quote .highlight {
+    color:#D4889A;
+    font-weight:700;
+  }
+  .cover-title {
+    padding:0 28px;
+    font-size:38px;
+    font-weight:800;
+    color:#2C2820;
+    line-height:1.25;
+    text-align:center;
+    margin-bottom:8px;
+  }
+
+  /* ============ Components ============ */
+  .info-block {
+    background:#fff;
+    border-radius:12px;
+    padding:18px 20px;
+    border-left:3px solid #6B7F99;
+  }
+  .info-block-title {
+    font-size:15px;
+    font-weight:700;
+    margin-bottom:8px;
+    color:#2C2820;
+  }
+  .info-block-text {
+    font-size:13px;
+    color:#5C5346;
+    line-height:1.65;
+  }
+  .info-block .big-num {
+    font-size:24px;
+    font-weight:800;
+    color:#D4889A;
+    line-height:1;
+  }
+  .info-block .num-label {
+    font-size:10px;
+    color:#8B7355;
+    margin-top:2px;
+  }
+
+  .num-row {
+    display:flex;
+    gap:14px;
+  }
+  .num-item {
+    flex:1;
+    background:#fff;
+    border-radius:10px;
+    padding:16px 12px;
+    text-align:center;
+  }
+  .num-item .big-num {
+    font-size:32px;
+    font-weight:800;
+    color:#D4889A;
+    line-height:1;
+  }
+  .num-item .num-label {
+    font-size:12px;
+    color:#5C5346;
+    margin-top:6px;
+    line-height:1.4;
+  }
+
+  .judgment-block {
+    background:linear-gradient(135deg, rgba(107,127,153,0.08), rgba(212,136,154,0.06));
+    border-radius:12px;
+    padding:18px 20px;
+    border:1px solid rgba(107,127,153,0.15);
+  }
+  .judgment-block .judgment-title {
+    font-size:13px;
+    color:#6B7F99;
+    font-weight:700;
+    letter-spacing:0.5px;
+    margin-bottom:8px;
+  }
+  .judgment-block .judgment-text {
+    font-size:14px;
+    color:#2C2820;
+    line-height:1.6;
+    font-weight:500;
+  }
+
+  .data-bar {
+    display:flex;
+    align-items:center;
+    gap:12px;
+    margin:8px 0;
+  }
+  .data-bar .label {
+    width:80px;
+    font-size:12px;
+    color:#5C5346;
+  }
+  .data-bar .bar {
+    flex:1;
+    height:22px;
+    background:rgba(107,127,153,0.1);
+    border-radius:11px;
+    overflow:hidden;
+  }
+  .data-bar .bar-fill {
+    height:100%;
+    background:linear-gradient(90deg, #6B7F99, #D4889A);
+    border-radius:11px;
+  }
+  .data-bar .val {
+    width:50px;
+    font-size:12px;
+    color:#8B7355;
+    text-align:right;
+    font-weight:600;
+  }
+
+  .evolution-chain {
+    display:flex;
+    flex-direction:column;
+    gap:10px;
+    margin:8px 0;
+  }
+  .evo-step {
+    display:flex;
+    align-items:center;
+    gap:12px;
+  }
+  .evo-num {
+    width:30px; height:30px;
+    border-radius:50%;
+    background:#D4889A;
+    color:#fff;
+    font-size:14px;
+    font-weight:700;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    flex-shrink:0;
+  }
+  .evo-content {
+    flex:1;
+    background:#fff;
+    border-radius:10px;
+    padding:12px 16px;
+    font-size:13px;
+    color:#2C2820;
+    line-height:1.55;
+  }
+  .evo-content .evo-title {
+    font-weight:700;
+    color:#6B7F99;
+    font-size:13px;
+  }
+
+  .insight-box {
+    background:linear-gradient(135deg, rgba(212,136,154,0.1), rgba(184,140,120,0.08));
+    border-radius:10px;
+    padding:14px 18px;
+    border-left:3px solid #D4889A;
+  }
+  .insight-box .insight-text {
+    font-size:13px;
+    color:#2C2820;
+    line-height:1.6;
+    font-style:italic;
+  }
+
+  .closing-quote {
+    flex:1;
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+    align-items:center;
+    text-align:center;
+    padding:0 36px;
+  }
+  .closing-quote .quote-mark {
+    font-size:80px;
+    color:rgba(212,136,154,0.3);
+    line-height:0.5;
+    margin-bottom:14px;
+  }
+  .closing-quote .quote-text {
+    font-size:20px;
+    font-weight:700;
+    color:#2C2820;
+    line-height:1.5;
+  }
+</style>
+</head>
+<body>
+<div class="container">
+
+<!-- ==================== P01 COVER ==================== -->
+<div class="card cover">
+  <div class="cover-illustration">
+    <!-- 此处放 CSS 几何插画或用户提供的图片 -->
+    <div style="font-size:13px;color:#8B7355;">插画区 · 可替换为图片</div>
+  </div>
+  <div class="cover-key-quote">
+    关键句<span class="highlight">重点词</span>，<br>
+    第二行关键句<span class="highlight">重点词</span>。
+  </div>
+  <div class="cover-title">报告标题<br>副标题</div>
+  <div class="card-footer" style="margin-top:auto;">来源：XXX 报告</div>
+</div>
+
+<!-- ==================== P02 内容页示例 ==================== -->
+<div class="card">
+  <div class="card-header">
+    <div class="card-tag">▎章节标签</div>
+    <div class="card-num">P02</div>
+  </div>
+  <div class="card-title">页面标题</div>
+  <div class="card-content">
+    <div class="num-row">
+      <div class="num-item">
+        <div class="big-num">6×</div>
+        <div class="num-label">说明文字一</div>
+      </div>
+      <div class="num-item">
+        <div class="big-num">21%</div>
+        <div class="num-label">说明文字二</div>
+      </div>
+    </div>
+    <div class="info-block" style="border-left-color:#6B7F99;">
+      <div class="info-block-title" style="color:#6B7F99;">信息块标题</div>
+      <div class="info-block-text">信息块正文内容。</div>
+    </div>
+    <div class="judgment-block">
+      <div class="judgment-title">核心判断</div>
+      <div class="judgment-text">判断内容文字。</div>
+    </div>
+    <div class="insight-box">
+      <div class="insight-text">"引言金句。"</div>
+    </div>
+  </div>
+  <div class="card-footer">来源：XXX 报告</div>
+</div>
+
+<!-- ==================== P03 步骤链示例 ==================== -->
+<div class="card">
+  <div class="card-header">
+    <div class="card-tag">▎章节标签</div>
+    <div class="card-num">P03</div>
+  </div>
+  <div class="card-title">页面标题</div>
+  <div class="card-content">
+    <div class="evolution-chain">
+      <div class="evo-step">
+        <div class="evo-num">1</div>
+        <div class="evo-content"><span class="evo-title">步骤一：</span>说明内容。</div>
+      </div>
+      <div class="evo-step">
+        <div class="evo-num">2</div>
+        <div class="evo-content"><span class="evo-title">步骤二：</span>说明内容。</div>
+      </div>
+      <div class="evo-step">
+        <div class="evo-num">3</div>
+        <div class="evo-content"><span class="evo-title">步骤三：</span>说明内容。</div>
+      </div>
+    </div>
+    <div class="data-bar">
+      <div class="label">2025</div>
+      <div class="bar"><div class="bar-fill" style="width:10%;"></div></div>
+      <div class="val">10%</div>
+    </div>
+    <div class="data-bar">
+      <div class="label">2026</div>
+      <div class="bar"><div class="bar-fill" style="width:22%;"></div></div>
+      <div class="val">22%</div>
+    </div>
+  </div>
+  <div class="card-footer">来源：XXX 报告</div>
+</div>
+
+</div>
+</body>
+</html>
